@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="ProjetJersey" default="build" basedir=".">
+    <!-- Propriétés -->
+    <property name="src.dir" value="src"/>
+    <property name="web.dir" value="WebContent"/> <!-- Le répertoire Web de votre projet -->
+    <property name="build.dir" value="bin"/> <!-- Répertoire des classes compilées -->
+    <property name="lib.dir" value="lib"/> <!-- Répertoire des bibliothèques tierces -->
+    <property name="glassfish.dir" value="/opt/glassfish7/glassfish/modules"/>
+
+    <!-- Tâche de compilation -->
+    <target name="compile" depends="init">
+        <javac srcdir="${src.dir}" destdir="${build.dir}" includeantruntime="false">
+            <classpath>
+                <!-- Mettez ici les dépendances de votre projet -->
+                <fileset dir="${lib.dir}">
+                    <include name="*.jar"/>
+                </fileset>
+                <fileset dir="${glassfish.dir}">
+                    <include name="**/*.jar"/>
+                </fileset>
+            </classpath>
+        </javac>
+    </target>
+
+    <!-- Tâche de création du WAR -->
+    <target name="war" depends="compile">
+        <war destfile="${build.dir}/ProjetJersey.war" needxmlfile="false">
+            <!-- Copiez les fichiers de votre répertoire Web -->
+            <fileset dir="${web.dir}" />
+            <!-- Copiez les fichiers compilés -->
+            <lib dir="${lib.dir}" />
+            <classes dir="${build.dir}" />
+        </war>
+    </target>
+
+
+    <!-- Tâche par défaut -->
+    <target name="default" depends="war"/>
+
+    <!-- Tâche d'initialisation -->
+    <target name="init">
+        <mkdir dir="${build.dir}"/>
+    </target>
+</project>
